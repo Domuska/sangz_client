@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">sangz_client</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="upvoteButtonText">Upvote</string>
+    <string name="downvoteButtonText">Downvote</string>
+</resources>
