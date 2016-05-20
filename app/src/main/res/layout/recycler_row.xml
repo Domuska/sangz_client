@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="10dp"
@@ -14,24 +13,33 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/recycler_artistName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recycler_songName"/>
+
+    <TextView
         android:id="@+id/recycler_voteCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="15dp"
         android:paddingLeft="15dp"
         android:paddingEnd="15dp"
-        android:paddingRight="15dp"/>
+        android:paddingRight="15dp"
+        android:layout_toLeftOf="@+id/recycler_upvotebutton"/>
 
     <Button
         android:id="@+id/recycler_upvotebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/upvoteButtonText" />
+        android:text="@string/upvoteButtonText"
+        android:layout_toLeftOf="@+id/recycler_downvotebutton"/>
 
     <Button
         android:id="@+id/recycler_downvotebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/downvoteButtonText" />
+        android:text="@string/downvoteButtonText"
+        android:layout_alignParentRight="true"/>
 
-</LinearLayout>
+</RelativeLayout>

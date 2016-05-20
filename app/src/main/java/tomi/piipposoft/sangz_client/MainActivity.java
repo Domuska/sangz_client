@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -33,6 +34,16 @@ public class MainActivity extends AppCompatActivity {
     TextView textView;
     private RecyclerView recyclerView;
     private AppCompatActivity thisActivity;
+    private String dataSet;
+
+    private RecyclerAdapter recyclerViewAdapter;
+
+    //todo set this to shared preferences - prolly a good idea to ask user the URL too at some point and use that
+    public static final String URL = "http://192.168.1.95:5000";
+    public static final String USER_ID = "1";
+
+    public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +52,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        thisActivity = this;
+
         textView = (TextView) findViewById(R.id.textView);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        thisActivity = this;
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -55,20 +66,13 @@ public class MainActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String url = "http://192.168.1.95:5000/sangz/api/playlist/";
+                    String url = MainActivity.URL + "/sangz/api/playlist/";
                     new DownloadWebpageTask().execute(url);
-
                 }
             });
 
         }
 
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(thisActivity, "hello", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
@@ -92,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     private class DownloadWebpageTask extends AsyncTask<String, Void, String>{
 
@@ -127,29 +132,30 @@ public class MainActivity extends AppCompatActivity {
             // http://stackoverflow.com/questions/9605913/how-to-parse-json-in-android
 
             if (s != null) {
-//                try {
-//                    JSONObject jsonObject = new JSONObject(s);
-//                    JSONObject collection = jsonObject.getJSONObject("collection");
-//                    JSONArray items = collection.getJSONArray("items");
-//
-//
-//                    for(int i = 0; i < items.length(); i++) {
-//
-//                        JSONObject aSong = items.getJSONObject(i);
-//                        String songHref = aSong.getString("href");
-//                        JSONArray songData = aSong.getJSONArray("data");
-//                        JSONObject songName = songData.getJSONObject(0);
-////                    String songNameString = songName.getString("value");
-//
-//                        //                dataset.add(jsonObject.getString())
-//                        dataset.add(songName.getString("value"));
-//                    }
-//
-//
-//                } catch (JSONException e) {
-//
-//                    e.printStackTrace();
-//                }
+
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
+                    JSONObject collection = jsonObject.getJSONObject("collection");
+                    JSONArray items = collection.getJSONArray("items");
+
+
+                    for(int i = 0; i < items.length(); i++) {
+
+                        JSONObject aSong = items.getJSONObject(i);
+                        String songHref = aSong.getString("href");
+                        JSONArray songData = aSong.getJSONArray("data");
+                        JSONObject songName = songData.getJSONObject(0);
+//                    String songNameString = songName.getString("value");
+
+                        //                dataset.add(jsonObject.getString())
+                        dataset.add(songName.getString("value"));
+                    }
+
+
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+                }
 
 
                 RecyclerAdapter adapter = new RecyclerAdapter(s);

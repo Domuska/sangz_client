@@ -1,5 +1,6 @@
 package tomi.piipposoft.sangz_client;
 
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +13,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 /**
@@ -25,18 +32,22 @@ import java.util.ArrayList;
  * item clicks:
  * http://stackoverflow.com/questions/24885223/why-doesnt-recyclerview-have-onitemclicklistener-and-how-recyclerview-is-dif
  */
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     private ArrayList<String> myData;
-    private ArrayList<JSONArray> jsonObjects;
+    private ArrayList<JSONArray> songDataArrays = new ArrayList<>();
+    private ArrayList<String> songURLs = new ArrayList<>();
+    private ArrayList<String> songVoteURLs = new ArrayList<>();
     private final String TAG = "RecyclerAdapter";
 
-//    public RecyclerAdapter(ArrayList<String> data) {
+
+
+    //    public RecyclerAdapter(ArrayList<String> data) {
 //        myData = data;
 //    }
-    public RecyclerAdapter (String data){
+    public RecyclerAdapter(String data) {
 
-        jsonObjects = new ArrayList<>();
+
 
         try {
             JSONObject jsonObject = new JSONObject(data);
@@ -44,10 +55,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             JSONArray items = collection.getJSONArray("items");
 
 
-            for(int i = 0; i < items.length(); i++) {
+            for (int i = 0; i < items.length(); i++) {
 
                 JSONObject aSong = items.getJSONObject(i);
                 String songHref = aSong.getString("href");
+                String songVoteHref = aSong.getString("href_vote");
                 JSONArray songData = aSong.getJSONArray("data");
                 JSONObject songName = songData.getJSONObject(0);
 //                    String songNameString = songName.getString("value");
@@ -55,7 +67,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 //                dataset.add(jsonObject.getString())
 //                dataset.add(songName.getString("value"));
 
-                jsonObjects.add(songData);
+                songDataArrays.add(songData);
+                songURLs.add(songHref);
+                songVoteURLs.add(songVoteHref);
             }
 
 
@@ -69,20 +83,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     /**
      * Viewholder for doing viewholder stuff
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView songName;
         public TextView voteCount;
+        public TextView artistName;
         public Button rowUpvoteButton;
         public Button rowDownvoteButton;
         public IViewHolderClicks clickListener;
 
 
-        public ViewHolder (View rowView, IViewHolderClicks listener){
+        public ViewHolder(View rowView, IViewHolderClicks listener) {
             super(rowView);
             clickListener = listener;
             songName = (TextView) rowView.findViewById(R.id.recycler_songName);
             voteCount = (TextView) rowView.findViewById(R.id.recycler_voteCount);
+            artistName = (TextView) rowView.findViewById(R.id.recycler_artistName);
             rowUpvoteButton = (Button) rowView.findViewById(R.id.recycler_upvotebutton);
             rowDownvoteButton = (Button) rowView.findViewById(R.id.recycler_downvotebutton);
 
@@ -94,16 +110,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         @Override
         public void onClick(View v) {
-            if(v instanceof Button){
+            if (v instanceof Button) {
                 //todo replace this string with one from shared preferences or something
-                if(((Button) v).getText().toString().equals("Upvote")){
+                if (((Button) v).getText().toString().equals("Upvote")) {
                     clickListener.onUpvoteButtonClicked((Button) v);
-                }
-                else{
+                } else {
                     clickListener.onDownvoteButtonClicked((Button) v);
                 }
-            }
-            else if(v instanceof TextView){
+            } else if (v instanceof TextView) {
                 clickListener.onSongNameClicker((TextView) v);
             }
 
@@ -113,7 +127,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public interface IViewHolderClicks {
 
             void onUpvoteButtonClicked(Button button);
+
             void onDownvoteButtonClicked(Button button);
+
             void onSongNameClicker(TextView textView);
         }
     }
@@ -124,6 +140,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
+//        View rowView = inflater.inflate(R.layout.recycler_row, parent, false);
         View rowView = inflater.inflate(R.layout.recycler_row, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(rowView, new ViewHolder.IViewHolderClicks() {
@@ -131,6 +148,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             public void onUpvoteButtonClicked(Button button) {
                 //here we should send an request to the server to add an up vote to this song
                 Log.d(TAG, "upvotebutton clicked");
+
             }
 
             @Override
@@ -151,17 +169,48 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
 
 
         try {
-            JSONObject songNameObject = jsonObjects.get(position).getJSONObject(0);
+            JSONObject songNameObject = songDataArrays.get(position).getJSONObject(0);
 //            dataset.add(songName.getString("value"));
             TextView textView = holder.songName;
             textView.setText(songNameObject.getString("value"));
             textView = holder.voteCount;
-            JSONObject voteCountObject = jsonObjects.get(position).getJSONObject(2);
+            JSONObject voteCountObject = songDataArrays.get(position).getJSONObject(2);
             textView.setText(voteCountObject.getString("value"));
+            textView = holder.artistName;
+            JSONObject artistName = songDataArrays.get(position).getJSONObject(1);
+            textView.setText(artistName.getString("value"));
+
+            final String[] params = new String[2];
+            params[0] = MainActivity.URL +  songVoteURLs.get(holder.getAdapterPosition());
+            Log.d(TAG, "url used: " + params);
+
+            holder.rowUpvoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Log.d(TAG, "upvote button clicked on position " + holder.getAdapterPosition());
+                    params[1] = generateUpvoteBody();
+                    new PostVoteTask().execute(params);
+
+                }
+            });
+
+            holder.rowDownvoteButton.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "downvote button clicked on position" + holder.getAdapterPosition());
+                    params[1] = generateDownvoteBody();
+                    new PostVoteTask().execute(params);
+
+                }
+            });
+
+
         }
         catch(JSONException e ){
             Log.d(TAG, "JSonException in recycleradapter");
@@ -171,10 +220,72 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     }
 
-
-
     @Override
     public int getItemCount() {
-        return jsonObjects.size();
+        return songDataArrays.size();
+    }
+
+    private String generateUpvoteBody(){
+
+        return "{" +
+                "\"type\": \"upvote\"," +
+                "\"voter_id\": \"" + MainActivity.USER_ID + "\"" +
+                "}";
+    }
+
+    private String generateDownvoteBody(){
+
+        return "{" +
+                "\"type\": \"downvote\"," +
+                "\"voter_id\": \"" + MainActivity.USER_ID + "\"" +
+                "}";
+    }
+
+    //todo move this to more sensible place
+    /**
+     * Async task for sending a vote to the server
+     * params for .execute should include an array of strings
+     * that has URL of the server as the first element
+     * and the body of the request as the second element
+     */
+    private class PostVoteTask extends AsyncTask<String, Void, String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+
+                OkHttpClient client = new OkHttpClient();
+
+                Log.d(TAG, "MEDIA_TYPE_JSON: " + params[1]);
+                Log.d(TAG, "Media type: " + MainActivity.MEDIA_TYPE_JSON);
+
+                RequestBody body = RequestBody.create(MainActivity.MEDIA_TYPE_JSON, params[1]);
+
+                Log.d(TAG,body.contentType().toString());
+
+                Request request = new Request.Builder()
+                        .url(params[0])
+                        .post(body)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                return response.body().string();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.d(TAG, "Response: " + s);
+
+        }
     }
 }
+
