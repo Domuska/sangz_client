@@ -78,4 +78,9 @@ public class SongDetailsActivity extends AppCompatActivity implements WebInterfa
     public void consumeData(String JSONString) {
         Log.d(TAG, JSONString);
     }
+
+    @Override
+    public void notifyDataChanged() {
+
+    }
 }

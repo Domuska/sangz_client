@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements WebInterface.Call
     private WebInterface.CallerActivity thisActivity;
 
     private String server_URL;
+    private String serverResponse;
 
     //todo prolly a good idea to ask user the URL too at some point and use that
     private String URL = "http://192.168.1.95:5000";
@@ -68,21 +69,18 @@ public class MainActivity extends AppCompatActivity implements WebInterface.Call
                 ""
         );
 
+        server_URL += "/sangz/api/playlist/";
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
 
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String url = server_URL + "/sangz/api/playlist/";
-                    new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(url);
+                    new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(server_URL);
                 }
             });
-
-
-
         }
-
     }
 
     @Override
@@ -107,10 +105,14 @@ public class MainActivity extends AppCompatActivity implements WebInterface.Call
         return super.onOptionsItemSelected(item);
     }
 
+    //todo this is a very bad way of doing this, we should handle JSON in here
+    // and make it into a list and use this list to initialize the adapter
     public void consumeData(String JSONstring){
 
+        serverResponse = JSONstring;
+
         try {
-            JSONObject jsonObject = new JSONObject(JSONstring);
+            JSONObject jsonObject = new JSONObject(serverResponse);
             JSONObject collection = jsonObject.getJSONObject("collection");
             JSONArray items = collection.getJSONArray("items");
 
@@ -123,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements WebInterface.Call
                 JSONObject songName = songData.getJSONObject(0);
             }
 
-            RecyclerAdapter adapter = new RecyclerAdapter(JSONstring);
+            RecyclerAdapter adapter = new RecyclerAdapter(serverResponse, this);
             recyclerView.setAdapter(adapter);
 
 
@@ -135,4 +137,8 @@ public class MainActivity extends AppCompatActivity implements WebInterface.Call
 
     }
 
+    @Override
+    public void notifyDataChanged() {
+        new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(server_URL);
+    }
 }

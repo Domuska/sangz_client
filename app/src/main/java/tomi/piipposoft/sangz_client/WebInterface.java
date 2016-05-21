@@ -11,5 +11,6 @@ public class WebInterface {
     public interface CallerActivity {
 
         void consumeData(String JSONString);
+        void notifyDataChanged();
     }
 }

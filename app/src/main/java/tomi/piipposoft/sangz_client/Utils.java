@@ -100,6 +100,14 @@ public class Utils {
 
         final String TAG = "PostVoteTask";
 
+        private WebInterface.CallerActivity caller;
+
+        public PostVoteTask setCallingActivity(WebInterface.CallerActivity callingActivity){
+
+            caller = callingActivity;
+            return this;
+        }
+
         @Override
         protected String doInBackground(String... params) {
 
@@ -134,28 +142,8 @@ public class Utils {
             super.onPostExecute(s);
 
             Log.d(TAG, "Response: " + s);
-
+            caller.notifyDataChanged();
         }
     }
 
-    public static class DownloadSongDetailsTask extends AsyncTask<String, Void, String> {
-
-        private WebInterface.CallerActivity caller;
-
-        public DownloadSongDetailsTask setCallingActivity(WebInterface.CallerActivity callingActivity){
-
-            caller = callingActivity;
-            return this;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-    }
 }

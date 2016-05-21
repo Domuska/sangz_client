@@ -25,6 +25,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import tomi.piipposoft.sangz_client.R;
 import tomi.piipposoft.sangz_client.Utils;
+import tomi.piipposoft.sangz_client.WebInterface;
 
 
 /**
@@ -46,14 +47,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private final String TAG = "RecyclerAdapter";
 
     private String server_URL;
+    private MainActivity callerActivity;
 
 
     //    public RecyclerAdapter(ArrayList<String> data) {
 //        myData = data;
 //    }
-    public RecyclerAdapter(String data) {
+    public RecyclerAdapter(String data, MainActivity activity) {
 
-
+        callerActivity = activity;
 
         try {
             JSONObject jsonObject = new JSONObject(data);
@@ -213,7 +215,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
                     Log.d(TAG, "upvote button clicked on position " + holder.getAdapterPosition());
                     params[1] = generateUpvoteBody();
-                    new Utils.PostVoteTask().execute(params);
+                    new Utils.PostVoteTask().setCallingActivity(callerActivity).execute(params);
 
                 }
             });
@@ -224,7 +226,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 public void onClick(View v) {
                     Log.d(TAG, "downvote button clicked on position " + holder.getAdapterPosition());
                     params[1] = generateDownvoteBody();
-                    new Utils.PostVoteTask().execute(params);
+                    new Utils.PostVoteTask().setCallingActivity(callerActivity).execute(params);
 
                 }
             });
@@ -246,8 +248,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             Log.d(TAG, "JSonException in recycleradapter");
             e.printStackTrace();
         }
-
-
     }
 
     @Override
