@@ -3,7 +3,6 @@ package tomi.piipposoft.sangz_client.Playlist;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,16 +15,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import tomi.piipposoft.sangz_client.R;
+import tomi.piipposoft.sangz_client.Song.SongDetailsActivity;
 import tomi.piipposoft.sangz_client.Utils;
-import tomi.piipposoft.sangz_client.WebInterface;
 
 
 /**

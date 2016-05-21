@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="tomi.piipposoft.sangz_client.Playlist.SongDetailsActivity"
+    tools:context=".Song.SongDetailsActivity"
     tools:showIn="@layout/activity_song_details">
 
     <TextView
@@ -19,7 +19,7 @@
         android:text="@string/song_details_song_name_info"/>
 
     <TextView
-        android:id="@+id/songName"
+        android:id="@+id/songDetailsSongName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/songNameInfo"
@@ -32,12 +32,12 @@
         android:id="@+id/artistNameInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/songName"
+        android:layout_below="@+id/songDetailsSongName"
         android:text="@string/song_details_artist_name_info"
         android:paddingTop="15dp"/>
 
     <TextView
-        android:id="@+id/artistName"
+        android:id="@+id/songDetailsArtistName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/artistNameInfo"
@@ -50,13 +50,13 @@
         android:id="@+id/albumNameInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/artistName"
+        android:layout_below="@+id/songDetailsArtistName"
         android:text="@string/song_details_album_name_info"
         android:paddingTop="15dp"
         />
 
     <TextView
-        android:id="@+id/albumName"
+        android:id="@+id/songDetailsAlbumName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/albumNameInfo"

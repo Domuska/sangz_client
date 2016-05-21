@@ -16,5 +16,13 @@
     <string name="song_details_no_artist_name">No artist found</string>
     <string name="song_details_no_album_name">No album found</string>
 
+    <string name="dialog_song_name_hint">Enter song name</string>
+    <string name="dialog_media_location_hint">Enter media location</string>
+    <string name="dialog_media_type_hint">Enter media type</string>
+    
+    <string name="dialog_message">Edit song\'s info</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
 
 </resources>

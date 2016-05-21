@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Playlist.SongDetailsActivity"
+            android:name=".Song.SongDetailsActivity"
             android:label="@string/title_activity_song_details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

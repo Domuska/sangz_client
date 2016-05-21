@@ -146,4 +146,45 @@ public class Utils {
         }
     }
 
+    public static class EditSongTask extends AsyncTask<String, Void, String>{
+
+        private final String TAG = "EditSongTask";
+
+        private WebInterface.CallerActivity caller;
+
+        public EditSongTask setCallingActivity(WebInterface.CallerActivity callingActivity){
+
+            caller = callingActivity;
+            return this;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                OkHttpClient client = new OkHttpClient();
+                RequestBody body = RequestBody.create(MainActivity.MEDIA_TYPE_JSON, params[1]);
+
+                Request request = new Request.Builder()
+                        .url(params[0])
+                        .put(body)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                return response.body().string();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.d(TAG, "response: " + s);
+            caller.notifyDataChanged();
+        }
+    }
+
 }
