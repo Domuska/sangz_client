@@ -23,6 +23,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import tomi.piipposoft.sangz_client.R;
+import tomi.piipposoft.sangz_client.Utils;
 
 
 /**
@@ -211,7 +212,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
                     Log.d(TAG, "upvote button clicked on position " + holder.getAdapterPosition());
                     params[1] = generateUpvoteBody();
-                    new PostVoteTask().execute(params);
+                    new Utils.PostVoteTask().execute(params);
 
                 }
             });
@@ -222,7 +223,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 public void onClick(View v) {
                     Log.d(TAG, "downvote button clicked on position" + holder.getAdapterPosition());
                     params[1] = generateDownvoteBody();
-                    new PostVoteTask().execute(params);
+                    new Utils.PostVoteTask().execute(params);
 
                 }
             });
@@ -258,51 +259,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 "}";
     }
 
-    //todo move this to more sensible place
-    /**
-     * Async task for sending a vote to the server
-     * params for .execute should include an array of strings
-     * that has URL of the server as the first element
-     * and the body of the request as the second element
-     */
-    private class PostVoteTask extends AsyncTask<String, Void, String>{
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-
-                OkHttpClient client = new OkHttpClient();
-
-                Log.d(TAG, "MEDIA_TYPE_JSON: " + params[1]);
-                Log.d(TAG, "Media type: " + MainActivity.MEDIA_TYPE_JSON);
-
-                RequestBody body = RequestBody.create(MainActivity.MEDIA_TYPE_JSON, params[1]);
-
-                Log.d(TAG,body.contentType().toString());
-
-                Request request = new Request.Builder()
-                        .url(params[0])
-                        .post(body)
-                        .build();
-
-                Response response = client.newCall(request).execute();
-                return response.body().string();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            Log.d(TAG, "Response: " + s);
-
-        }
-    }
 }
 
