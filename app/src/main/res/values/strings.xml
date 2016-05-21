@@ -4,4 +4,7 @@
 
     <string name="upvoteButtonText">Upvote</string>
     <string name="downvoteButtonText">Downvote</string>
+
+    <string name="sharedPreferences">tomi.piipposoft.sangz_client.sharedprefs</string>
+    <string name="sharedPreferencesUrlKey">URL</string>
 </resources>

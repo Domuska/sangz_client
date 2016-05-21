@@ -1,5 +1,7 @@
-package tomi.piipposoft.sangz_client;
+package tomi.piipposoft.sangz_client.Playlist;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +22,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import tomi.piipposoft.sangz_client.R;
 
 
 /**
@@ -40,6 +43,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private ArrayList<String> songVoteURLs = new ArrayList<>();
     private final String TAG = "RecyclerAdapter";
 
+    private String server_URL;
 
 
     //    public RecyclerAdapter(ArrayList<String> data) {
@@ -140,6 +144,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
+        SharedPreferences prefs = parent.getContext().getSharedPreferences(
+                parent.getContext().getResources().getString(R.string.sharedPreferences),
+                Context.MODE_PRIVATE
+        );
+
+        server_URL = prefs.getString(
+                parent.getContext().getResources().getString(R.string.sharedPreferencesUrlKey),
+                "NO URL FOUND");
+
+
 //        View rowView = inflater.inflate(R.layout.recycler_row, parent, false);
         View rowView = inflater.inflate(R.layout.recycler_row, parent, false);
 
@@ -185,8 +199,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             textView.setText(artistName.getString("value"));
 
             final String[] params = new String[2];
-            params[0] = MainActivity.URL +  songVoteURLs.get(holder.getAdapterPosition());
-            Log.d(TAG, "url used: " + params);
+
+
+
+            params[0] = server_URL +  songVoteURLs.get(holder.getAdapterPosition());
+            Log.d(TAG, "url used: " + params[0]);
 
             holder.rowUpvoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override

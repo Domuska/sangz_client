@@ -1,4 +1,4 @@
-package tomi.piipposoft.sangz_client;
+package tomi.piipposoft.sangz_client.Playlist;
 
 /**
  * Created by Domu on 18-May-16.

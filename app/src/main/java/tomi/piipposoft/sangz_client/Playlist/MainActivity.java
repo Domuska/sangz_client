@@ -1,0 +1,111 @@
+package tomi.piipposoft.sangz_client.Playlist;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
+
+import okhttp3.MediaType;
+import tomi.piipposoft.sangz_client.R;
+import tomi.piipposoft.sangz_client.Utils;
+
+public class MainActivity extends AppCompatActivity implements WebInterface.CallerActivity {
+
+    private final String TAG = "MainActivity";
+    TextView textView;
+    private RecyclerView recyclerView;
+    private WebInterface.CallerActivity thisActivity;
+
+    private String server_URL;
+
+    //todo prolly a good idea to ask user the URL too at some point and use that
+    private String URL = "http://192.168.1.95:5000";
+    public static final String USER_ID = "1";
+
+    public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        thisActivity = this;
+
+        textView = (TextView) findViewById(R.id.textView);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        SharedPreferences prefs = this.getSharedPreferences(
+                getResources().getString(R.string.sharedPreferences),
+                Context.MODE_PRIVATE
+        );
+
+        prefs.edit().putString(
+                getResources().getString(R.string.sharedPreferencesUrlKey),
+                this.URL)
+                .apply();
+
+        server_URL = prefs.getString(
+                getResources().getString(R.string.sharedPreferencesUrlKey),
+                ""
+        );
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (fab != null) {
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = server_URL + "/sangz/api/playlist/";
+                    new Utils.DownloadWebpageTask().setCallingActivity(thisActivity).execute(url);
+                }
+            });
+
+
+
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void consumeData(String JSONstring){
+
+        RecyclerAdapter adapter = new RecyclerAdapter(JSONstring);
+        recyclerView.setAdapter(adapter);
+    }
+
+}
