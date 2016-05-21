@@ -13,9 +13,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import okhttp3.MediaType;
 import tomi.piipposoft.sangz_client.R;
 import tomi.piipposoft.sangz_client.Utils;
+import tomi.piipposoft.sangz_client.WebInterface;
 
 public class MainActivity extends AppCompatActivity implements WebInterface.CallerActivity {
 
@@ -70,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements WebInterface.Call
                 @Override
                 public void onClick(View view) {
                     String url = server_URL + "/sangz/api/playlist/";
-                    new Utils.DownloadWebpageTask().setCallingActivity(thisActivity).execute(url);
+                    new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(url);
                 }
             });
 
@@ -104,8 +109,30 @@ public class MainActivity extends AppCompatActivity implements WebInterface.Call
 
     public void consumeData(String JSONstring){
 
-        RecyclerAdapter adapter = new RecyclerAdapter(JSONstring);
-        recyclerView.setAdapter(adapter);
+        try {
+            JSONObject jsonObject = new JSONObject(JSONstring);
+            JSONObject collection = jsonObject.getJSONObject("collection");
+            JSONArray items = collection.getJSONArray("items");
+
+
+            for(int i = 0; i < items.length(); i++) {
+
+                JSONObject aSong = items.getJSONObject(i);
+                String songHref = aSong.getString("href");
+                JSONArray songData = aSong.getJSONArray("data");
+                JSONObject songName = songData.getJSONObject(0);
+            }
+
+            RecyclerAdapter adapter = new RecyclerAdapter(JSONstring);
+            recyclerView.setAdapter(adapter);
+
+
+        } catch (JSONException e) {
+
+            e.printStackTrace();
+        }
+
+
     }
 
 }

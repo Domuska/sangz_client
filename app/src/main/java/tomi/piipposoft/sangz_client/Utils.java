@@ -15,7 +15,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import tomi.piipposoft.sangz_client.Playlist.MainActivity;
-import tomi.piipposoft.sangz_client.Playlist.WebInterface;
 
 /**
  * Created by Domu on 21-May-16.
@@ -31,13 +30,13 @@ public class Utils {
      * in setCallingActivity. The consumeData will be supplied the JSON
      * response that is gotten from server.
      */
-    public static class DownloadWebpageTask extends AsyncTask<String, Void, String> {
+    public static class DownloadPlaylistTask extends AsyncTask<String, Void, String> {
 
         private String TAG = "DownloadWebPageTask";
 
         private WebInterface.CallerActivity caller;
 
-        public DownloadWebpageTask setCallingActivity(WebInterface.CallerActivity callingActivity){
+        public DownloadPlaylistTask setCallingActivity(WebInterface.CallerActivity callingActivity){
 
             caller = callingActivity;
             return this;
@@ -69,34 +68,11 @@ public class Utils {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.d(TAG, "Got data: " + s);
 
-            ArrayList<String> dataset = new ArrayList<>();
-            //todo: lets not really handle json here, move this to more reasonable place
+            Log.d(TAG, "Got data: " + s);
             // http://stackoverflow.com/questions/9605913/how-to-parse-json-in-android
 
             if (s != null) {
-
-                try {
-                    JSONObject jsonObject = new JSONObject(s);
-                    JSONObject collection = jsonObject.getJSONObject("collection");
-                    JSONArray items = collection.getJSONArray("items");
-
-
-                    for(int i = 0; i < items.length(); i++) {
-
-                        JSONObject aSong = items.getJSONObject(i);
-                        String songHref = aSong.getString("href");
-                        JSONArray songData = aSong.getJSONArray("data");
-                        JSONObject songName = songData.getJSONObject(0);
-                        dataset.add(songName.getString("value"));
-                    }
-
-
-                } catch (JSONException e) {
-
-                    e.printStackTrace();
-                }
 
                 caller.consumeData(s);
             }
@@ -159,6 +135,27 @@ public class Utils {
 
             Log.d(TAG, "Response: " + s);
 
+        }
+    }
+
+    public static class DownloadSongDetailsTask extends AsyncTask<String, Void, String> {
+
+        private WebInterface.CallerActivity caller;
+
+        public DownloadSongDetailsTask setCallingActivity(WebInterface.CallerActivity callingActivity){
+
+            caller = callingActivity;
+            return this;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
         }
     }
 }

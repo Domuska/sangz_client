@@ -2,9 +2,19 @@
     <string name="app_name">sangz_client</string>
     <string name="action_settings">Settings</string>
 
+    <string name="sharedPreferences">tomi.piipposoft.sangz_client.sharedprefs</string>
+    <string name="sharedPreferencesUrlKey">URL</string>
+    <string name="title_activity_song_details">SongDetailsActivity</string>
+
     <string name="upvoteButtonText">Upvote</string>
     <string name="downvoteButtonText">Downvote</string>
 
-    <string name="sharedPreferences">tomi.piipposoft.sangz_client.sharedprefs</string>
-    <string name="sharedPreferencesUrlKey">URL</string>
+    <string name="song_details_song_name_info">Name</string>
+    <string name="song_details_artist_name_info">Artist</string>
+    <string name="song_details_album_name_info">Album</string>
+    <string name="song_details_no_song_name">No name found</string>
+    <string name="song_details_no_artist_name">No artist found</string>
+    <string name="song_details_no_album_name">No album found</string>
+
+
 </resources>

@@ -1,6 +1,7 @@
 package tomi.piipposoft.sangz_client.Playlist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
@@ -221,10 +222,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "downvote button clicked on position" + holder.getAdapterPosition());
+                    Log.d(TAG, "downvote button clicked on position " + holder.getAdapterPosition());
                     params[1] = generateDownvoteBody();
                     new Utils.PostVoteTask().execute(params);
 
+                }
+            });
+
+            holder.songName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "songName clicked on position " + holder.getAdapterPosition());
+                    Log.d(TAG, "Url put in: " + songURLs.get(holder.getAdapterPosition()));
+                    Intent i = new Intent(v.getContext(), SongDetailsActivity.class);
+                    i.putExtra(SongDetailsActivity.EXTRAS_URL, songURLs.get(holder.getAdapterPosition()));
+                    v.getContext().startActivity(i);
                 }
             });
 
