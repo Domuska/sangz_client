@@ -3,15 +3,11 @@ package tomi.piipposoft.sangz_client.Song;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -23,14 +19,15 @@ import tomi.piipposoft.sangz_client.Utils;
 import tomi.piipposoft.sangz_client.WebInterface;
 
 public class SongDetailsActivity extends AppCompatActivity
-        implements WebInterface.CallerActivity,
+        implements WebInterface.INewData,
+        WebInterface.IRemovedData,
         EditSongDialog.NoticeDialogListener{
 
     public static String EXTRAS_URL = "url_extra";
 
     private final String TAG = "SongDetailsActivity";
 
-    private WebInterface.CallerActivity thisActivity;
+    private WebInterface.INewData thisActivity;
     private String url;
     private TextView songName;
 
@@ -141,7 +138,7 @@ public class SongDetailsActivity extends AppCompatActivity
         params[0] = SongDetailsActivity.this.url;
         params[1] = generatePostBody(dialogText);
         Log.d(TAG, "PUT body: " + params[1]);
-        new Utils.EditSongTask().setCallingActivity(thisActivity).execute(params);
+        new Utils.EditSongTask().setCallingActivity(SongDetailsActivity.this).execute(params);
     }
 
     private String generatePostBody(String songName){
@@ -156,7 +153,7 @@ public class SongDetailsActivity extends AppCompatActivity
 
         String[] params = {SongDetailsActivity.this.url};
         Log.d(TAG, "sending DELETE to URL: " + params[0]);
-        new Utils.DeleteSongTask().execute(params);
+        new Utils.DeleteSongTask().setCallingActivity(SongDetailsActivity.this).execute(params);
 
     }
 
@@ -166,9 +163,10 @@ public class SongDetailsActivity extends AppCompatActivity
         DialogFragment dialog = new EditSongDialog();
         dialog.show(SongDetailsActivity.this.getSupportFragmentManager(), "EditSongDetailsFragment");
 
-//        return "{" +
-//                "\"songname\": \"supersong2\"," +
-//                "\"medialocation\": \"youtube\"" +
-//                "}";
+    }
+
+    @Override
+    public void songDeleted() {
+        SongDetailsActivity.this.finish();
     }
 }

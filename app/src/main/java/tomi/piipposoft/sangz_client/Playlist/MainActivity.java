@@ -22,12 +22,12 @@ import tomi.piipposoft.sangz_client.R;
 import tomi.piipposoft.sangz_client.Utils;
 import tomi.piipposoft.sangz_client.WebInterface;
 
-public class MainActivity extends AppCompatActivity implements WebInterface.CallerActivity {
+public class MainActivity extends AppCompatActivity implements WebInterface.INewData {
 
     private final String TAG = "MainActivity";
     TextView textView;
     private RecyclerView recyclerView;
-    private WebInterface.CallerActivity thisActivity;
+    private WebInterface.INewData thisActivity;
 
     private String server_URL;
     private String serverResponse;

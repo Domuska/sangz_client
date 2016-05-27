@@ -3,12 +3,7 @@ package tomi.piipposoft.sangz_client;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -34,9 +29,9 @@ public class Utils {
 
         private String TAG = "DownloadWebPageTask";
 
-        private WebInterface.CallerActivity caller;
+        private WebInterface.INewData caller;
 
-        public DownloadPlaylistTask setCallingActivity(WebInterface.CallerActivity callingActivity){
+        public DownloadPlaylistTask setCallingActivity(WebInterface.INewData callingActivity){
 
             caller = callingActivity;
             return this;
@@ -100,9 +95,9 @@ public class Utils {
 
         final String TAG = "PostVoteTask";
 
-        private WebInterface.CallerActivity caller;
+        private WebInterface.INewData caller;
 
-        public PostVoteTask setCallingActivity(WebInterface.CallerActivity callingActivity){
+        public PostVoteTask setCallingActivity(WebInterface.INewData callingActivity){
 
             caller = callingActivity;
             return this;
@@ -146,13 +141,16 @@ public class Utils {
         }
     }
 
+    /**
+     * Async task for sending PUT messages
+     */
     public static class EditSongTask extends AsyncTask<String, Void, String>{
 
         private final String TAG = "EditSongTask";
 
-        private WebInterface.CallerActivity caller;
+        private WebInterface.INewData caller;
 
-        public EditSongTask setCallingActivity(WebInterface.CallerActivity callingActivity){
+        public EditSongTask setCallingActivity(WebInterface.INewData callingActivity){
 
             caller = callingActivity;
             return this;
@@ -187,11 +185,25 @@ public class Utils {
         }
     }
 
+    /**
+     * Async task for sending DELETE messages
+     */
     public static class DeleteSongTask extends AsyncTask<String, Void, Void>{
+
+        private final String TAG = "DeleteSongTask";
+        private WebInterface.IRemovedData caller;
+
+        public DeleteSongTask setCallingActivity(WebInterface.IRemovedData callingActivity){
+
+            caller = callingActivity;
+            return this;
+        }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            Log.d(TAG, "DELETE call finishing");
+            caller.songDeleted();
         }
 
         @Override
