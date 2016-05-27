@@ -3,12 +3,15 @@ package tomi.piipposoft.sangz_client.Song;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -59,26 +62,27 @@ public class SongDetailsActivity extends AppCompatActivity
         final String serverURL = url;
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-//                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show();
 
-                    generateEditSongDetailsFragment();
-//                    String[] params = new String[2];
+
+//        if (modifySongFab != null) {
+//            modifySongFab.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+////                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+////                            .setAction("Action", null).show();
 //
-//                    params[0] = SongDetailsActivity.this.url;
-//                    params[1] = generateEditSongDetailsFragment();
-//                    Log.d(TAG, "PUT body: " + params[1]);
-//                    new Utils.EditSongTask().setCallingActivity(thisActivity).execute(params);
-
-                    //put this button to expand into delete/edit?
-                }
-            });
-        }
+//                    generateEditSongDetailsFragment();
+////                    String[] params = new String[2];
+////
+////                    params[0] = SongDetailsActivity.this.url;
+////                    params[1] = generateEditSongDetailsFragment();
+////                    Log.d(TAG, "PUT body: " + params[1]);
+////                    new Utils.EditSongTask().setCallingActivity(thisActivity).execute(params);
+//
+//                    //put this button to expand into delete/edit?
+//                }
+//            });
+//        }
 
 
     }
@@ -88,6 +92,21 @@ public class SongDetailsActivity extends AppCompatActivity
         super.onResume();
         new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(this.url);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        if(item.getItemId() == R.id.toolbar_delete_song){
+            Log.d(TAG, "delete song clicked");
+
+        }
+        else if(item.getItemId() == R.id.toolbar_modify_song){
+            Log.d(TAG, "modify song clicked");
+        }
+
+        return true;
     }
 
     @Override

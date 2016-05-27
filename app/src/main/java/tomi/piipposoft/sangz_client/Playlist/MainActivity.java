@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements WebInterface.Call
 
         server_URL += "/sangz/api/playlist/";
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_modify_song);
         if (fab != null) {
 
             fab.setOnClickListener(new View.OnClickListener() {
