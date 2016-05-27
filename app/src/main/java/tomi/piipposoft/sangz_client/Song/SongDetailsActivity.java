@@ -1,12 +1,15 @@
 package tomi.piipposoft.sangz_client.Song;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -14,7 +17,9 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import tomi.piipposoft.sangz_client.Playlist.PlaylistActivity;
 import tomi.piipposoft.sangz_client.R;
+import tomi.piipposoft.sangz_client.Songs.SongListActivity;
 import tomi.piipposoft.sangz_client.Utils;
 import tomi.piipposoft.sangz_client.WebInterface;
 
@@ -36,22 +41,6 @@ public class SongDetailsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        ImageButton deleteSongButton = (ImageButton) toolbar.findViewById(R.id.toolbar_delete_song);
-        deleteSongButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendDeleteSong();
-            }
-        });
-
-        ImageButton modifySongButton = (ImageButton) toolbar.findViewById(R.id.toolbar_modify_song);
-        modifySongButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                generateEditSongDetailsFragment();
-            }
-        });
 
         setSupportActionBar(toolbar);
 
@@ -75,6 +64,27 @@ public class SongDetailsActivity extends AppCompatActivity
         Log.d(TAG, "URL: " + url);
 
         final String serverURL = url;
+
+
+
+        Toolbar bottomToolBar = (Toolbar) findViewById(R.id.toolbar2);
+        bottomToolBar.inflateMenu(R.menu.menu_bottom_menu);
+        bottomToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                if(item.getItemId() == R.id.bottom_bar_playlist){
+                    Intent i = new Intent(SongDetailsActivity.this, PlaylistActivity.class);
+                    startActivity(i);
+                }
+                else if(item.getItemId() == R.id.bottom_bar_songs_list){
+                    Intent i = new Intent(SongDetailsActivity.this, SongListActivity.class);
+                    startActivity(i);
+                }
+
+                return true;
+            }
+        });
 
 
 
@@ -107,6 +117,26 @@ public class SongDetailsActivity extends AppCompatActivity
         super.onResume();
         new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(this.url);
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_song_details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.toolbar_delete_song){
+            sendDeleteSong();
+        }
+        else if(item.getItemId() == R.id.toolbar_modify_song){
+            generateEditSongDetailsFragment();
+        }
+
+        return true;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package tomi.piipposoft.sangz_client.Playlist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 
 import okhttp3.MediaType;
 import tomi.piipposoft.sangz_client.R;
+import tomi.piipposoft.sangz_client.Songs.SongListActivity;
 import tomi.piipposoft.sangz_client.Utils;
 import tomi.piipposoft.sangz_client.WebInterface;
 
@@ -81,6 +83,27 @@ public class PlaylistActivity extends AppCompatActivity implements WebInterface.
                 }
             });
         }
+
+        //inflate the bottom menu
+        Toolbar bottomToolBar = (Toolbar) findViewById(R.id.toolbar2);
+        bottomToolBar.inflateMenu(R.menu.menu_bottom_menu);
+        bottomToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                if(item.getItemId() == R.id.bottom_bar_playlist){
+                    //already here!
+                }
+                else if(item.getItemId() == R.id.bottom_bar_songs_list){
+                    Intent i = new Intent(PlaylistActivity.this, SongListActivity.class);
+                    startActivity(i);
+                }
+
+                return true;
+            }
+        });
+//        getMenuInflater().inflate(R.menu.menu_bottom_menu, bottomToolBar);
+
     }
 
     @Override
@@ -125,7 +148,7 @@ public class PlaylistActivity extends AppCompatActivity implements WebInterface.
                 JSONObject songName = songData.getJSONObject(0);
             }
 
-            RecyclerAdapter adapter = new RecyclerAdapter(serverResponse, this);
+            PlaylistRecyclerAdapter adapter = new PlaylistRecyclerAdapter(serverResponse, this);
             recyclerView.setAdapter(adapter);
 
 

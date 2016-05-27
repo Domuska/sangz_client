@@ -16,6 +16,8 @@ import tomi.piipposoft.sangz_client.Playlist.PlaylistActivity;
  */
 public class Utils {
 
+    // TODO references to the activity interface should maybe be replaced by WeakReferences?
+
     /**
      * Async task for making a GET request to the server,
      * Params should include the URL for the server where the

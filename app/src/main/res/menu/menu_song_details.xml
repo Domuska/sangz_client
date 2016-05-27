@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Song.SongDetailsActivity">
+
+    <item
+        android:id="@+id/toolbar_delete_song"
+        android:title="delete song"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:icon="@mipmap/ic_delete_black_36dp"
+        android:background="@android:color/transparent"
+        android:layout_marginRight="15dp"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="1"
+        />
+
+    <item
+        android:id="@+id/toolbar_modify_song"
+        android:title="modify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:icon="@mipmap/ic_mode_edit_black_36dp"
+        android:background="@android:color/transparent"
+        android:layout_marginRight="15dp"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="2"
+        />
+
+</menu>

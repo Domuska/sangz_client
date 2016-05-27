@@ -32,7 +32,7 @@ import tomi.piipposoft.sangz_client.Utils;
  * item clicks:
  * http://stackoverflow.com/questions/24885223/why-doesnt-recyclerview-have-onitemclicklistener-and-how-recyclerview-is-dif
  */
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecyclerAdapter.ViewHolder> {
 
     private ArrayList<String> myData;
     private ArrayList<JSONArray> songDataArrays = new ArrayList<>();
@@ -47,7 +47,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     //    public RecyclerAdapter(ArrayList<String> data) {
 //        myData = data;
 //    }
-    public RecyclerAdapter(String data, PlaylistActivity activity) {
+    public PlaylistRecyclerAdapter(String data, PlaylistActivity activity) {
 
         callerActivity = activity;
 
@@ -155,8 +155,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 "NO URL FOUND");
 
 
-//        View rowView = inflater.inflate(R.layout.recycler_row, parent, false);
-        View rowView = inflater.inflate(R.layout.recycler_row, parent, false);
+//        View rowView = inflater.inflate(R.layout.playlist_recycler_row, parent, false);
+        View rowView = inflater.inflate(R.layout.playlist_recycler_row, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(rowView, new ViewHolder.IViewHolderClicks() {
             @Override
