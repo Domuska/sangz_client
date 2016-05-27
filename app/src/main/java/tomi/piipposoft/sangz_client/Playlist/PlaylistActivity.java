@@ -22,7 +22,7 @@ import tomi.piipposoft.sangz_client.R;
 import tomi.piipposoft.sangz_client.Utils;
 import tomi.piipposoft.sangz_client.WebInterface;
 
-public class MainActivity extends AppCompatActivity implements WebInterface.INewData {
+public class PlaylistActivity extends AppCompatActivity implements WebInterface.INewData {
 
     private final String TAG = "MainActivity";
     TextView textView;

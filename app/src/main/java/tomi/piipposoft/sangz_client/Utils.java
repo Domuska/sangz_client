@@ -9,7 +9,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import tomi.piipposoft.sangz_client.Playlist.MainActivity;
+import tomi.piipposoft.sangz_client.Playlist.PlaylistActivity;
 
 /**
  * Created by Domu on 21-May-16.
@@ -111,9 +111,9 @@ public class Utils {
                 OkHttpClient client = new OkHttpClient();
 
                 Log.d(TAG, "MEDIA_TYPE_JSON: " + params[1]);
-                Log.d(TAG, "Media type: " + MainActivity.MEDIA_TYPE_JSON);
+                Log.d(TAG, "Media type: " + PlaylistActivity.MEDIA_TYPE_JSON);
 
-                RequestBody body = RequestBody.create(MainActivity.MEDIA_TYPE_JSON, params[1]);
+                RequestBody body = RequestBody.create(PlaylistActivity.MEDIA_TYPE_JSON, params[1]);
 
                 Log.d(TAG,body.contentType().toString());
 
@@ -161,7 +161,7 @@ public class Utils {
 
             try {
                 OkHttpClient client = new OkHttpClient();
-                RequestBody body = RequestBody.create(MainActivity.MEDIA_TYPE_JSON, params[1]);
+                RequestBody body = RequestBody.create(PlaylistActivity.MEDIA_TYPE_JSON, params[1]);
 
                 Request request = new Request.Builder()
                         .url(params[0])

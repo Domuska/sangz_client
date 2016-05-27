@@ -41,13 +41,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private final String TAG = "RecyclerAdapter";
 
     private String server_URL;
-    private MainActivity callerActivity;
+    private PlaylistActivity callerActivity;
 
 
     //    public RecyclerAdapter(ArrayList<String> data) {
 //        myData = data;
 //    }
-    public RecyclerAdapter(String data, MainActivity activity) {
+    public RecyclerAdapter(String data, PlaylistActivity activity) {
 
         callerActivity = activity;
 
@@ -256,7 +256,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         return "{" +
                 "\"type\": \"upvote\"," +
-                "\"voter_id\": \"" + MainActivity.USER_ID + "\"" +
+                "\"voter_id\": \"" + PlaylistActivity.USER_ID + "\"" +
                 "}";
     }
 
@@ -264,7 +264,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         return "{" +
                 "\"type\": \"downvote\"," +
-                "\"voter_id\": \"" + MainActivity.USER_ID + "\"" +
+                "\"voter_id\": \"" + PlaylistActivity.USER_ID + "\"" +
                 "}";
     }
 
