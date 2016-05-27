@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/artistNameInfo"
-        android:layout_toEndOf="@+id/artistNameInfo"
+        android:layout_alignStart="@+id/songDetailsSongName"
         android:paddingTop="15dp"
         android:text="@string/song_details_no_artist_name"
         />
@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/albumNameInfo"
-        android:layout_toEndOf="@+id/albumNameInfo"
+        android:layout_alignStart="@+id/songDetailsArtistName"
         android:paddingTop="15dp"
         android:text="@string/song_details_no_album_name"
         />

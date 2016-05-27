@@ -25,6 +25,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:src="@mipmap/ic_delete_black_36dp"
+                android:background="@android:color/transparent"
+                android:layout_marginRight="15dp"
                 />
 
             <ImageButton
@@ -33,6 +35,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:src="@mipmap/ic_mode_edit_black_36dp"
+                android:background="@android:color/transparent"
+                android:layout_marginRight="15dp"
                 />
 
         </android.support.v7.widget.Toolbar>

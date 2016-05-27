@@ -63,7 +63,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 String songHref = aSong.getString("href");
 //                String songVoteHref = aSong.getString("href_vote");
                 JSONArray linksArray = aSong.getJSONArray("links");
-                String songVoteHref = linksArray.getString(0);
+                JSONObject songVoteHrefObject = linksArray.getJSONObject(0);
+                String songVoteHref = songVoteHrefObject.getString("href");
                 JSONArray songData = aSong.getJSONArray("data");
                 JSONObject songName = songData.getJSONObject(0);
 //                    String songNameString = songName.getString("value");

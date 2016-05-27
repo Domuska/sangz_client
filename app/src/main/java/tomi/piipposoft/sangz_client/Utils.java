@@ -187,4 +187,33 @@ public class Utils {
         }
     }
 
+    public static class DeleteSongTask extends AsyncTask<String, Void, Void>{
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+
+            try {
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url(params[0])
+                    .delete()
+                    .build();
+
+
+                client.newCall(request).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+    }
+
 }

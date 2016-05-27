@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -38,6 +39,23 @@ public class SongDetailsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        ImageButton deleteSongButton = (ImageButton) toolbar.findViewById(R.id.toolbar_delete_song);
+        deleteSongButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendDeleteSong();
+            }
+        });
+
+        ImageButton modifySongButton = (ImageButton) toolbar.findViewById(R.id.toolbar_modify_song);
+        modifySongButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generateEditSongDetailsFragment();
+            }
+        });
+
         setSupportActionBar(toolbar);
 
         thisActivity = this;
@@ -95,21 +113,6 @@ public class SongDetailsActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-
-        if(item.getItemId() == R.id.toolbar_delete_song){
-            Log.d(TAG, "delete song clicked");
-
-        }
-        else if(item.getItemId() == R.id.toolbar_modify_song){
-            Log.d(TAG, "modify song clicked");
-        }
-
-        return true;
-    }
-
-    @Override
     public void consumeData(String JSONString) {
         Log.d(TAG, JSONString);
 
@@ -128,6 +131,7 @@ public class SongDetailsActivity extends AppCompatActivity
         new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(this.url);
     }
 
+    // called when OK is clicked in edit song dialog
     @Override
     public void onDialogPositiveClick(String dialogText) {
         Log.d(TAG, "got text from dialog: " + dialogText);
@@ -135,7 +139,6 @@ public class SongDetailsActivity extends AppCompatActivity
         String[] params = new String[2];
 
         params[0] = SongDetailsActivity.this.url;
-//        params[1] = generateEditSongDetailsFragment();
         params[1] = generatePostBody(dialogText);
         Log.d(TAG, "PUT body: " + params[1]);
         new Utils.EditSongTask().setCallingActivity(thisActivity).execute(params);
@@ -143,11 +146,20 @@ public class SongDetailsActivity extends AppCompatActivity
 
     private String generatePostBody(String songName){
 
-                return "{" +
-                "\"songname\": \"" + songName +"\"," +
-                "\"medialocation\": \"youtube\"" +
-                "}";
+        return "{" +
+            "\"songname\": \"" + songName +"\"," +
+            "\"medialocation\": \"youtube\"" +
+            "}";
     }
+
+    private void sendDeleteSong(){
+
+        String[] params = {SongDetailsActivity.this.url};
+        Log.d(TAG, "sending DELETE to URL: " + params[0]);
+        new Utils.DeleteSongTask().execute(params);
+
+    }
+
 
     private void generateEditSongDetailsFragment(){
 
