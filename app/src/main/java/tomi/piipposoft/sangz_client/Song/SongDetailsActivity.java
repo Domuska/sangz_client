@@ -14,21 +14,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tomi.piipposoft.sangz_client.Playlist.PlaylistActivity;
 import tomi.piipposoft.sangz_client.R;
 import tomi.piipposoft.sangz_client.Songs.SongListActivity;
 import tomi.piipposoft.sangz_client.Utils;
 import tomi.piipposoft.sangz_client.WebInterface;
 
 public class SongDetailsActivity extends AppCompatActivity
-        implements WebInterface.INewData,
+        implements WebInterface.IConsumeData,
         WebInterface.IRemovedData,
+        WebInterface.IDataChanged,
         EditSongDialog.NoticeDialogListener{
 
     public static String EXTRAS_URL = "url_extra";
@@ -37,7 +36,7 @@ public class SongDetailsActivity extends AppCompatActivity
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
-    private WebInterface.INewData thisActivity;
+    private WebInterface.IConsumeData thisActivity;
     private String url;
     private TextView songName;
 
@@ -139,7 +138,7 @@ public class SongDetailsActivity extends AppCompatActivity
     }
 
     @Override
-    public void notifyDataChanged() {
+    public void notifyServerDataChanged() {
         new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(this.url);
     }
 

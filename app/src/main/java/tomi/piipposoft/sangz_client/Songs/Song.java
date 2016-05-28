@@ -3,21 +3,20 @@ package tomi.piipposoft.sangz_client.Songs;
 /**
  * Created by Domu on 28-May-16.
  */
-public class SingleSong {
+public class Song {
 
     private String songName;
     private String artistName;
     private String albumName;
-
-
-
+    private String ID;
     private String url;
 
-    public SingleSong(String song, String artist, String album, String url){
+    public Song(String song, String artist, String album, String url, String ID){
         this.songName = song;
         this.artistName = artist;
         this.albumName = album;
         this.url = url;
+        this.ID = ID;
     }
 
     public String getSongName() {
@@ -34,6 +33,10 @@ public class SingleSong {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getID() {
+        return ID;
     }
 
 }

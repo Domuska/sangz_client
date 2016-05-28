@@ -5,12 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import tomi.piipposoft.sangz_client.R;
@@ -20,10 +16,10 @@ import tomi.piipposoft.sangz_client.R;
  */
 public class SongListRecyclerAdapter extends RecyclerView.Adapter<SongListRecyclerAdapter.ViewHolder>{
 
-    private ArrayList<SingleSong> songList;
+    private ArrayList<Song> songList;
     private final String TAG = "SongListRecyclerAdapter";
 
-    public SongListRecyclerAdapter(ArrayList<SingleSong> songParams)
+    public SongListRecyclerAdapter(ArrayList<Song> songParams)
     {
         songList = songParams;
     }

@@ -28,12 +28,14 @@ import tomi.piipposoft.sangz_client.Songs.SongListActivity;
 import tomi.piipposoft.sangz_client.Utils;
 import tomi.piipposoft.sangz_client.WebInterface;
 
-public class PlaylistActivity extends AppCompatActivity implements WebInterface.INewData {
+public class PlaylistActivity extends AppCompatActivity implements
+        WebInterface.IConsumeData,
+        WebInterface.IDataChanged{
 
     private final String TAG = "MainActivity";
     TextView textView;
     private RecyclerView recyclerView;
-    private WebInterface.INewData thisActivity;
+    private WebInterface.IConsumeData thisActivity;
 
     private String server_URL;
     private String serverResponse;
@@ -42,9 +44,12 @@ public class PlaylistActivity extends AppCompatActivity implements WebInterface.
 
     //todo prolly a good idea to ask user the URL too at some point and use that
     private String URL = "http://192.168.1.95:5000";
-    public static final String USER_ID = "1";
 
+    // todo should go to sharedprefs
+    public static final String USER_ID = "1";
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
+    public static final MediaType MEDIA_TYPE_COLLECTION_JSON = MediaType.parse("application/vnd.collection+json");
+
 
 
     @Override
@@ -192,7 +197,7 @@ public class PlaylistActivity extends AppCompatActivity implements WebInterface.
     }
 
     @Override
-    public void notifyDataChanged() {
+    public void notifyServerDataChanged() {
         new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(server_URL);
     }
 }

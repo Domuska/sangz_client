@@ -16,6 +16,9 @@ import tomi.piipposoft.sangz_client.Playlist.PlaylistActivity;
  */
 public class Utils {
 
+    private static final int HTTP_NO_CONTENT = 204;
+    private static final int HTTP_CREATED = 201;
+
     // TODO references to the activity interface should maybe be replaced by WeakReferences?
 
     /**
@@ -31,9 +34,9 @@ public class Utils {
 
         private String TAG = "DownloadWebPageTask";
 
-        private WebInterface.INewData caller;
+        private WebInterface.IConsumeData caller;
 
-        public DownloadPlaylistTask setCallingActivity(WebInterface.INewData callingActivity){
+        public DownloadPlaylistTask setCallingActivity(WebInterface.IConsumeData callingActivity){
 
             caller = callingActivity;
             return this;
@@ -76,12 +79,6 @@ public class Utils {
 
             else{
                 //todo do some magic to show error in UI in caller activity
-//                thisActivity.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(thisActivity, "something went wrong!", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
                 Log.d(TAG, "ERROR, no data!");
             }
         }
@@ -97,9 +94,9 @@ public class Utils {
 
         final String TAG = "PostVoteTask";
 
-        private WebInterface.INewData caller;
+        private WebInterface.IDataChanged caller;
 
-        public PostVoteTask setCallingActivity(WebInterface.INewData callingActivity){
+        public PostVoteTask setCallingActivity(WebInterface.IDataChanged callingActivity){
 
             caller = callingActivity;
             return this;
@@ -139,7 +136,7 @@ public class Utils {
             super.onPostExecute(s);
 
             Log.d(TAG, "Response: " + s);
-            caller.notifyDataChanged();
+            caller.notifyServerDataChanged();
         }
     }
 
@@ -150,9 +147,9 @@ public class Utils {
 
         private final String TAG = "EditSongTask";
 
-        private WebInterface.INewData caller;
+        private WebInterface.IDataChanged caller;
 
-        public EditSongTask setCallingActivity(WebInterface.INewData callingActivity){
+        public EditSongTask setCallingActivity(WebInterface.IDataChanged callingActivity){
 
             caller = callingActivity;
             return this;
@@ -183,7 +180,7 @@ public class Utils {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d(TAG, "response: " + s);
-            caller.notifyDataChanged();
+            caller.notifyServerDataChanged();
         }
     }
 
@@ -227,6 +224,56 @@ public class Utils {
             }
 
             return null;
+        }
+    }
+
+    /**
+     *  async task for POST when adding a new song,
+     *  uses collection+json as mime type
+     */
+    public static class AddSongTask extends AsyncTask<String, Void, Integer>{
+
+        private WebInterface.IDataChanged caller;
+        private final String TAG = "AddSongTask";
+
+        public AddSongTask setCallingActivity(WebInterface.IDataChanged caller){
+            this.caller = caller;
+            return this;
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+
+            try{
+                OkHttpClient client = new OkHttpClient();
+                RequestBody body = RequestBody.create(PlaylistActivity.MEDIA_TYPE_COLLECTION_JSON, params[1]);
+                Log.d(TAG, "header used:" + PlaylistActivity.MEDIA_TYPE_COLLECTION_JSON + " body: " + params[1]);
+
+                Request request = new Request.Builder()
+                        .url(params[0])
+                        .post(body)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                Log.d(TAG, response.message());
+                return response.code();
+            }
+            catch(IOException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+
+            if(integer == HTTP_CREATED)
+                caller.notifyServerDataChanged();
+            else{
+                Log.d(TAG, "something went wrong, got header " + integer);
+            }
+
         }
     }
 

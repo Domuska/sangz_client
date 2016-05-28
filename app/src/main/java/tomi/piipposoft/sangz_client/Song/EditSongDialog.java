@@ -54,7 +54,7 @@ public class EditSongDialog extends DialogFragment {
         final EditText editText = (EditText) view.findViewById(R.id.dialog_song_name);
 
         builder.setView(view)
-                .setMessage(R.string.dialog_message)
+                .setMessage(R.string.dialog_edit_song_message)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
@@ -73,24 +73,3 @@ public class EditSongDialog extends DialogFragment {
         return builder.create();
     }
 }
-
-//public class FireMissilesDialogFragment extends DialogFragment {
-//    @Override
-//    public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        // Use the Builder class for convenient dialog construction
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setMessage(R.string.dialog_fire_missiles)
-//                .setPositiveButton(R.string.fire, new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        // FIRE ZE MISSILES!
-//                    }
-//                })
-//                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        // User cancelled the dialog
-//                    }
-//                });
-//        // Create the AlertDialog object and return it
-//        return builder.create();
-//    }
-//}

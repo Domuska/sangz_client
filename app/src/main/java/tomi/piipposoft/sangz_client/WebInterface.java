@@ -8,14 +8,15 @@ package tomi.piipposoft.sangz_client;
  */
 public class WebInterface {
 
-    public interface INewData {
-
+    public interface IConsumeData {
         void consumeData(String JSONString);
-        void notifyDataChanged();
+    }
+
+    public interface IDataChanged{
+        void notifyServerDataChanged();
     }
 
     public interface IRemovedData{
-
         void songDeleted();
     }
 }

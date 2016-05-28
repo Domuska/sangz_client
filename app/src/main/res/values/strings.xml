@@ -20,7 +20,7 @@
     <string name="dialog_media_location_hint">Enter media location</string>
     <string name="dialog_media_type_hint">Enter media type</string>
 
-    <string name="dialog_message">Edit song\'s info</string>
+    <string name="dialog_edit_song_message">Edit song\'s info</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_songs">SongsActivity</string>
@@ -31,8 +31,11 @@
     <string name="songList_default_artist_text">N/A</string>
     <string name="songList_default_album_text">N/A</string>
 
-    <string name ="openDrawer">Open drawer</string>
+    <string name="openDrawer">Open drawer</string>
     <string name="closeDrawer">Close drawer</string>
+
+    <string name="dialog_add_song_message">Add a new song</string>
+
 
 
 </resources>
