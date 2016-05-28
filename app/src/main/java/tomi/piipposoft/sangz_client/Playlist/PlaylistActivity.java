@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +37,8 @@ public class PlaylistActivity extends AppCompatActivity implements WebInterface.
 
     private String server_URL;
     private String serverResponse;
+
+    private DrawerLayout drawerLayout;
 
     //todo prolly a good idea to ask user the URL too at some point and use that
     private String URL = "http://192.168.1.95:5000";
@@ -84,26 +90,51 @@ public class PlaylistActivity extends AppCompatActivity implements WebInterface.
             });
         }
 
-        //inflate the bottom menu
-        Toolbar bottomToolBar = (Toolbar) findViewById(R.id.toolbar2);
-        bottomToolBar.inflateMenu(R.menu.menu_bottom_menu);
-        bottomToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+        if (navigationView != null) {
+
+            navigationView.setCheckedItem(R.id.drawer_playlist);
+
+            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem item) {
+
+                    drawerLayout.closeDrawers();
+
+                    if(item.getItemId() == R.id.drawer_playlist){
+                        Log.d(TAG, "playlist clicked");
+                        // already here!
+                        return true;
+
+                    }
+                    else if(item.getItemId() == R.id.drawer_songlist){
+                        Intent i = new Intent(PlaylistActivity.this, SongListActivity.class);
+                        startActivity(i);
+                        return true;
+                    }
+
+
+                    return false;
+                }
+            });
+        }
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.openDrawer, R.string.closeDrawer){
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-
-                if(item.getItemId() == R.id.bottom_bar_playlist){
-                    //already here!
-                }
-                else if(item.getItemId() == R.id.bottom_bar_songs_list){
-                    Intent i = new Intent(PlaylistActivity.this, SongListActivity.class);
-                    startActivity(i);
-                }
-
-                return true;
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
             }
-        });
-//        getMenuInflater().inflate(R.menu.menu_bottom_menu, bottomToolBar);
 
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
     }
 
     @Override

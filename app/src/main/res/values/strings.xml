@@ -25,11 +25,14 @@
     <string name="cancel">Cancel</string>
     <string name="title_activity_songs">SongsActivity</string>
 
-    <string name="bottom_menu_playlist">Playlist</string>
-    <string name="bottom_menu_songs_list">Songs</string>
+    <string name="playlist">Playlist</string>
+    <string name="songs_list">Songs</string>
 
     <string name="songList_default_artist_text">N/A</string>
     <string name="songList_default_album_text">N/A</string>
+
+    <string name ="openDrawer">Open drawer</string>
+    <string name="closeDrawer">Close drawer</string>
 
 
 </resources>
