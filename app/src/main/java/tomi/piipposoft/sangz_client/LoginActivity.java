@@ -27,10 +27,11 @@ public class LoginActivity extends AppCompatActivity implements WebInterface.ICo
 
 
     private final String TAG = "LoginActivity";
+    private final String DEFAULT_SHARED_PREF = "noValue";
+    private final String DEFAULT_URL = "http://192.168.1.95:5000";
 
     private String user_resource_URL = "/sangz/api/users/";
-    private String URL = "http://192.168.1.95:5000";
-
+    private String URL;
     private String userName;
     SharedPreferences prefs;
 
@@ -50,10 +51,20 @@ public class LoginActivity extends AppCompatActivity implements WebInterface.ICo
                 Context.MODE_PRIVATE
         );
 
-        prefs.edit().putString(
+
+
+        URL = prefs.getString(
                 getResources().getString(R.string.sharedPreferencesUrlKey),
-                this.URL)
-                .apply();
+                DEFAULT_SHARED_PREF
+        );
+
+        if(URL.equals(DEFAULT_SHARED_PREF)) {
+
+            prefs.edit().putString(
+                    getResources().getString(R.string.sharedPreferencesUrlKey),
+                    this.DEFAULT_URL)
+                    .apply();
+        }
 
 
 

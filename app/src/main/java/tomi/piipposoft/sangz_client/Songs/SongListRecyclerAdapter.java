@@ -78,6 +78,8 @@ public class SongListRecyclerAdapter extends RecyclerView.Adapter<SongListRecycl
 
 
 
+
+
     @Override
     public int getItemCount() {
         return songList.size();

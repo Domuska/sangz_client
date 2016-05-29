@@ -143,10 +143,10 @@ public class SongListActivity extends AppCompatActivity implements
                 String albumName = "";
                 String songId = "";
 
+                //get the data from the array
                 for(int j = 0; j < data.length(); j++){
                     JSONObject entry = data.getJSONObject(j);
                     String string = entry.getString("name");
-//                    Log.d(TAG, "entry:" + string + " value: " + entry.getString("value"));
 
                     switch(string){
                         case "songname":
@@ -164,22 +164,18 @@ public class SongListActivity extends AppCompatActivity implements
                     }
                 }
 
-                Log.d(TAG, "found values:" + songName + " " + artistName + " " + albumName + " " + songUrl);
-
-
-                songsList.add(new Song(songName, artistName, albumName, songUrl, songId));
-                int itemCount = recyclerView.getAdapter().getItemCount();
-//                recyclerView.getAdapter().notifyItemChanged(itemCount + i);
-                recyclerView.getAdapter().notifyItemChanged(i);
-
-
-//                if (i >= songsList.size()) {
-//                    songsList.add(new Song(songName, artistName, albumName, songUrl, songId));
-//                    int itemCount = recyclerView.getAdapter().getItemCount();
-//                    recyclerView.getAdapter().notifyItemChanged(itemCount + i);
-//                }
-
-
+                //check if the song is already in the array, if it is then do not add it
+                //todo could optimize to check the ID earlier
+                if(songsList.size() >= i+1 && songsList.get(i).getID() == songId){
+                    //do nothing
+                }
+                else{
+                    Log.d(TAG, "found values:" + songName + " " + artistName + " " + albumName + " " + songUrl);
+                    Log.d(TAG, "Song list size: " + songsList.size());
+                    songsList.add(new Song(songName, artistName, albumName, songUrl, songId));
+                    Log.d(TAG, "Song list size: " + songsList.size());
+                    recyclerView.getAdapter().notifyItemChanged(i);
+                }
             }
 
         }
@@ -207,8 +203,7 @@ public class SongListActivity extends AppCompatActivity implements
                     generateAddSongPostBody(textInputs.get(0), textInputs.get(1))
             };
 
-            //set songsList empty since new data should be arriving soon (a bad idea but hey, who's gonna sue me at this point)
-            songsList = new ArrayList<>();
+
             new Utils.AddSongTask().setCallingActivity(SongListActivity.this).execute(params);
         }
         else{
@@ -226,7 +221,6 @@ public class SongListActivity extends AppCompatActivity implements
     }
 
     private String generateAddSongPostBody(String songName, String mediaLocation){
-
 
         try {
             JSONObject body = new JSONObject();
