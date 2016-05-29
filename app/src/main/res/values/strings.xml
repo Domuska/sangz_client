@@ -33,6 +33,7 @@
 
     <string name="songList_default_artist_text">N/A</string>
     <string name="songList_default_album_text">N/A</string>
+    <string name="songList_snackbar_error_text">Include song\'s name and media location</string>
 
     <string name="openDrawer">Open drawer</string>
     <string name="closeDrawer">Close drawer</string>

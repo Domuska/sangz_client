@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -172,11 +173,23 @@ public class SongListActivity extends AppCompatActivity implements
             Log.d(TAG, i + " " + textInputs.get(i));
         }
 
-        String[] params = {thisResourceURL, generateAddSongPostBody(textInputs.get(0), textInputs.get(1))};
+        if(! (textInputs.get(0).isEmpty() && textInputs.get(1).isEmpty())) {
+            //add URL used and generate the POST JSON body
+            String[] params = {thisResourceURL,
+                    generateAddSongPostBody(textInputs.get(0), textInputs.get(1))
+            };
 
-        //set songsList empty since new data should be arriving soon (a bad idea but hey, who's gonna sue me at this point)
-        songsList = new ArrayList<>();
-        new Utils.AddSongTask().setCallingActivity(SongListActivity.this).execute(params);
+            //set songsList empty since new data should be arriving soon (a bad idea but hey, who's gonna sue me at this point)
+            songsList = new ArrayList<>();
+            new Utils.AddSongTask().setCallingActivity(SongListActivity.this).execute(params);
+        }
+        else{
+            Snackbar snackbar = Snackbar.make(
+                    findViewById(R.id.songs_coordinatorLayout),
+                    this.getResources().getString(R.string.songList_snackbar_error_text),
+                    Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
     }
 
     private void generateAddSongFragment(){
