@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import tomi.piipposoft.sangz_client.JsonGenerator;
 import tomi.piipposoft.sangz_client.R;
 import tomi.piipposoft.sangz_client.Song.SongDetailsActivity;
 import tomi.piipposoft.sangz_client.Utils;
@@ -213,8 +214,6 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
             final String[] params = new String[2];
 
-
-
             params[0] = server_URL +  songVoteURLs.get(holder.getAdapterPosition());
             Log.d(TAG, "url used: " + params[0]);
 
@@ -223,7 +222,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
                 public void onClick(View v) {
 
                     Log.d(TAG, "upvote button clicked on position " + holder.getAdapterPosition());
-                    params[1] = generateUpvoteBody();
+                    params[1] = JsonGenerator.generateUpvoteBody(user_id);
                     new Utils.PostVoteTask().setCallingActivity(callerActivity).execute(params);
 
                 }
@@ -234,7 +233,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "downvote button clicked on position " + holder.getAdapterPosition());
-                    params[1] = generateDownvoteBody();
+                    params[1] = JsonGenerator.generateDownvoteBody(user_id);
                     new Utils.PostVoteTask().setCallingActivity(callerActivity).execute(params);
 
                 }
@@ -264,22 +263,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         return songDataArrays.size();
     }
 
-    //todo change this to use JSONObjects
-    private String generateUpvoteBody(){
 
-        return "{" +
-                "\"type\": \"upvote\"," +
-                "\"voter_id\": \"" + user_id + "\"" +
-                "}";
-    }
-
-    private String generateDownvoteBody(){
-
-        return "{" +
-                "\"type\": \"downvote\"," +
-                "\"voter_id\": \"" + user_id + "\"" +
-                "}";
-    }
 
 }
 

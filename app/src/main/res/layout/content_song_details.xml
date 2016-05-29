@@ -65,6 +65,30 @@
         android:text="@string/song_details_no_album_name"
         />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/songDetailsAlbumName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+
+        <Button
+            android:id="@+id/song_details_upvote_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upvoteButtonText"
+            android:visibility="invisible"/>
+
+        <Button
+            android:id="@+id/song_details_downvote_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/downvoteButtonText"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+
 
 
 </RelativeLayout>

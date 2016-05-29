@@ -14,11 +14,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import tomi.piipposoft.sangz_client.JsonGenerator;
 import tomi.piipposoft.sangz_client.R;
 import tomi.piipposoft.sangz_client.Songs.SongListActivity;
 import tomi.piipposoft.sangz_client.Utils;
@@ -38,7 +40,10 @@ public class SongDetailsActivity extends AppCompatActivity
 
     private WebInterface.IConsumeData thisActivity;
     private String url;
+    String thisSongurl;
+    private String vote_url;
     private TextView songName;
+    private Button upvoteButton, downvoteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,8 @@ public class SongDetailsActivity extends AppCompatActivity
         thisActivity = this;
 
         songName = (TextView) findViewById(R.id.songDetailsSongName);
+        upvoteButton = (Button) findViewById(R.id.song_details_upvote_button);
+        downvoteButton = (Button) findViewById(R.id.song_details_downvote_button);
 
 
         SharedPreferences preferences = this.getSharedPreferences(
@@ -64,42 +71,41 @@ public class SongDetailsActivity extends AppCompatActivity
                 ""
         );
 
-        url += getIntent().getExtras().getString(SongDetailsActivity.EXTRAS_URL);
-        Log.d(TAG, "URL: " + url);
-
-        final String serverURL = url;
-
-
-
-//        Toolbar bottomToolBar = (Toolbar) findViewById(R.id.toolbar2);
-//        bottomToolBar.inflateMenu(R.menu.menu_bottom_menu);
-//        bottomToolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//
-//                if(item.getItemId() == R.id.bottom_bar_playlist){
-//                    Intent i = new Intent(SongDetailsActivity.this, PlaylistActivity.class);
-//                    startActivity(i);
-//                }
-//                else if(item.getItemId() == R.id.bottom_bar_songs_list){
-//                    Intent i = new Intent(SongDetailsActivity.this, SongListActivity.class);
-//                    startActivity(i);
-//                }
-//
-//                return true;
-//            }
-//        });
-
-
+        thisSongurl = url + getIntent().getExtras().getString(SongDetailsActivity.EXTRAS_URL);
+        Log.d(TAG, "URL: " + thisSongurl);
         initializeDrawer();
 
+        final String user_id = preferences.getString(
+                getResources().getString(R.string.sharedPreferencesUserIDKey),
+                ""
+        );
+
+        upvoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String[] params = new String[2];
+                params[0] = vote_url;
+                params[1] = JsonGenerator.generateUpvoteBody(user_id);
+                new Utils.PostVoteTask().setCallingActivity(SongDetailsActivity.this).execute(params);
+            }
+        });
+
+        downvoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String[] params = new String[2];
+                params[0] = vote_url;
+                params[1] = JsonGenerator.generateDownvoteBody(user_id);
+                new Utils.PostVoteTask().setCallingActivity(SongDetailsActivity.this).execute(params);
+            }
+        });
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        new Utils.GetDataTask().setCallingActivity(thisActivity).execute(this.url);
+        new Utils.GetDataTask().setCallingActivity(thisActivity).execute(this.thisSongurl);
 
     }
 
@@ -132,6 +138,11 @@ public class SongDetailsActivity extends AppCompatActivity
             String songNameString = object.getString("songname");
             songName.setText(songNameString);
 
+            upvoteButton.setVisibility(View.VISIBLE);
+            downvoteButton.setVisibility(View.VISIBLE);
+            vote_url = url +  object.getJSONArray("links").getJSONObject(0).getString("votes");
+            Log.d(TAG, "vote_url got from server: " + vote_url);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -139,7 +150,7 @@ public class SongDetailsActivity extends AppCompatActivity
 
     @Override
     public void notifyServerDataChanged() {
-        new Utils.GetDataTask().setCallingActivity(thisActivity).execute(this.url);
+        new Utils.GetDataTask().setCallingActivity(thisActivity).execute(this.thisSongurl);
     }
 
     // called when OK is clicked in edit song dialog
@@ -149,7 +160,7 @@ public class SongDetailsActivity extends AppCompatActivity
 
         String[] params = new String[2];
 
-        params[0] = SongDetailsActivity.this.url;
+        params[0] = SongDetailsActivity.this.thisSongurl;
         params[1] = generatePostBody(dialogText);
         Log.d(TAG, "PUT body: " + params[1]);
         new Utils.EditSongTask().setCallingActivity(SongDetailsActivity.this).execute(params);
