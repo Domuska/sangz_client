@@ -68,28 +68,24 @@ public class PlaylistActivity extends AppCompatActivity implements
                 Context.MODE_PRIVATE
         );
 
-//        prefs.edit().putString(
-//                getResources().getString(R.string.sharedPreferencesUrlKey),
-//                this.URL)
-//                .apply();
-
         server_URL = prefs.getString(
                 getResources().getString(R.string.sharedPreferencesUrlKey),
                 ""
         );
 
         server_URL += "/sangz/api/playlist/";
+        sendGETPlaylist();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_modify_song);
-        if (fab != null) {
-
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new Utils.GetDataTask().setCallingActivity(thisActivity).execute(server_URL);
-                }
-            });
-        }
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_modify_song);
+//        if (fab != null) {
+//
+//            fab.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    new Utils.GetDataTask().setCallingActivity(thisActivity).execute(server_URL);
+//                }
+//            });
+//        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
@@ -141,7 +137,7 @@ public class PlaylistActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_playlist, menu);
         return true;
     }
 
@@ -153,7 +149,8 @@ public class PlaylistActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_refresh) {
+            sendGETPlaylist();
             return true;
         }
 
@@ -194,6 +191,10 @@ public class PlaylistActivity extends AppCompatActivity implements
 
     @Override
     public void notifyServerDataChanged() {
+        sendGETPlaylist();
+    }
+
+    private void sendGETPlaylist(){
         new Utils.GetDataTask().setCallingActivity(thisActivity).execute(server_URL);
     }
 }
