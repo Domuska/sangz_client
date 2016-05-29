@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tomi.piipposoft.sangz_client.JsonGenerator;
+import tomi.piipposoft.sangz_client.Playlist.PlaylistActivity;
 import tomi.piipposoft.sangz_client.R;
 import tomi.piipposoft.sangz_client.Songs.SongListActivity;
 import tomi.piipposoft.sangz_client.Utils;
@@ -183,8 +184,8 @@ public class SongDetailsActivity extends AppCompatActivity
                     drawerLayout.closeDrawers();
 
                     if(item.getItemId() == R.id.drawer_playlist){
-                        Log.d(TAG, "playlist clicked");
-                        // already here!
+                        Intent i = new Intent(SongDetailsActivity.this, PlaylistActivity.class);
+                        startActivity(i);
                         return true;
 
                     }
