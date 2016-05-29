@@ -99,7 +99,7 @@ public class SongDetailsActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(this.url);
+        new Utils.GetDataTask().setCallingActivity(thisActivity).execute(this.url);
 
     }
 
@@ -139,7 +139,7 @@ public class SongDetailsActivity extends AppCompatActivity
 
     @Override
     public void notifyServerDataChanged() {
-        new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(this.url);
+        new Utils.GetDataTask().setCallingActivity(thisActivity).execute(this.url);
     }
 
     // called when OK is clicked in edit song dialog

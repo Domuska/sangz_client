@@ -39,6 +39,8 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     private ArrayList<String> songURLs = new ArrayList<>();
     private ArrayList<String> songVoteURLs = new ArrayList<>();
     private final String TAG = "RecyclerAdapter";
+    private SharedPreferences prefs;
+    private String user_id;
 
     private String server_URL;
     private PlaylistActivity callerActivity;
@@ -50,6 +52,16 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
     public PlaylistRecyclerAdapter(String data, PlaylistActivity activity) {
 
         callerActivity = activity;
+        prefs = activity.getSharedPreferences(
+                activity.getResources().getString(R.string.sharedPreferences),
+                Context.MODE_PRIVATE
+        );
+
+        user_id = prefs.getString(
+                activity.getResources().getString(R.string.sharedPreferencesUserIDKey),
+                ""
+        );
+
 
         try {
             JSONObject jsonObject = new JSONObject(data);
@@ -252,11 +264,12 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         return songDataArrays.size();
     }
 
+    //todo change this to use JSONObjects
     private String generateUpvoteBody(){
 
         return "{" +
                 "\"type\": \"upvote\"," +
-                "\"voter_id\": \"" + PlaylistActivity.USER_ID + "\"" +
+                "\"voter_id\": \"" + user_id + "\"" +
                 "}";
     }
 
@@ -264,7 +277,7 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
         return "{" +
                 "\"type\": \"downvote\"," +
-                "\"voter_id\": \"" + PlaylistActivity.USER_ID + "\"" +
+                "\"voter_id\": \"" + user_id + "\"" +
                 "}";
     }
 

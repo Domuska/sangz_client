@@ -39,6 +39,7 @@ public class SongListActivity extends AppCompatActivity implements
     private String server_URL;
     private ArrayList<Song> songsList;
     private RecyclerView recyclerView;
+    private SharedPreferences prefs;
 
     DrawerLayout drawerLayout;
     Toolbar toolbar;
@@ -54,7 +55,7 @@ public class SongListActivity extends AppCompatActivity implements
         songsList = new ArrayList<>();
 
 
-        SharedPreferences prefs = this.getSharedPreferences(
+        prefs = this.getSharedPreferences(
                 getResources().getString(R.string.sharedPreferences),
                 Context.MODE_PRIVATE
         );
@@ -86,7 +87,7 @@ public class SongListActivity extends AppCompatActivity implements
 
 
 
-        new Utils.DownloadPlaylistTask().setCallingActivity(this).execute(thisResourceURL);
+        new Utils.GetDataTask().setCallingActivity(this).execute(thisResourceURL);
 
         initializeDrawer();
     }
@@ -161,7 +162,7 @@ public class SongListActivity extends AppCompatActivity implements
 
     @Override
     public void notifyServerDataChanged() {
-        new Utils.DownloadPlaylistTask().setCallingActivity(this).execute(thisResourceURL);
+        new Utils.GetDataTask().setCallingActivity(this).execute(thisResourceURL);
     }
 
     @Override
@@ -197,7 +198,13 @@ public class SongListActivity extends AppCompatActivity implements
 
             JSONObject userIdObject = new JSONObject();
             userIdObject.put("name", "user_id");
-            userIdObject.put("value", PlaylistActivity.USER_ID);
+
+            String user_id = prefs.getString(
+                    getResources().getString(R.string.sharedPreferencesUserIDKey),
+                    ""
+            );
+
+            userIdObject.put("value", user_id);
             data.put(1, userIdObject);
 
             JSONObject mediaLocationObject = new JSONObject();

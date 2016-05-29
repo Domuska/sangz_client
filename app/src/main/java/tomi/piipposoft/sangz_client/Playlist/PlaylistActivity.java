@@ -42,11 +42,7 @@ public class PlaylistActivity extends AppCompatActivity implements
 
     private DrawerLayout drawerLayout;
 
-    //todo prolly a good idea to ask user the URL too at some point and use that
-    private String URL = "http://192.168.1.95:5000";
-
     // todo should go to sharedprefs
-    public static final String USER_ID = "1";
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json");
     public static final MediaType MEDIA_TYPE_COLLECTION_JSON = MediaType.parse("application/vnd.collection+json");
 
@@ -72,10 +68,10 @@ public class PlaylistActivity extends AppCompatActivity implements
                 Context.MODE_PRIVATE
         );
 
-        prefs.edit().putString(
-                getResources().getString(R.string.sharedPreferencesUrlKey),
-                this.URL)
-                .apply();
+//        prefs.edit().putString(
+//                getResources().getString(R.string.sharedPreferencesUrlKey),
+//                this.URL)
+//                .apply();
 
         server_URL = prefs.getString(
                 getResources().getString(R.string.sharedPreferencesUrlKey),
@@ -90,7 +86,7 @@ public class PlaylistActivity extends AppCompatActivity implements
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(server_URL);
+                    new Utils.GetDataTask().setCallingActivity(thisActivity).execute(server_URL);
                 }
             });
         }
@@ -198,6 +194,6 @@ public class PlaylistActivity extends AppCompatActivity implements
 
     @Override
     public void notifyServerDataChanged() {
-        new Utils.DownloadPlaylistTask().setCallingActivity(thisActivity).execute(server_URL);
+        new Utils.GetDataTask().setCallingActivity(thisActivity).execute(server_URL);
     }
 }
