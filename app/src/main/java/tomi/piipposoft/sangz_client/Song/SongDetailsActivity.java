@@ -43,7 +43,7 @@ public class SongDetailsActivity extends AppCompatActivity
     private String url;
     String thisSongurl;
     private String vote_url;
-    private TextView songName;
+    private TextView songNameField, albumNameField, artistNameField;
     private Button upvoteButton, downvoteButton;
 
     @Override
@@ -56,7 +56,9 @@ public class SongDetailsActivity extends AppCompatActivity
 
         thisActivity = this;
 
-        songName = (TextView) findViewById(R.id.songDetailsSongName);
+        songNameField = (TextView) findViewById(R.id.songDetailsSongName);
+        artistNameField = (TextView) findViewById(R.id.songDetailsArtistName);
+        albumNameField = (TextView) findViewById(R.id.songDetailsAlbumName);
         upvoteButton = (Button) findViewById(R.id.song_details_upvote_button);
         downvoteButton = (Button) findViewById(R.id.song_details_downvote_button);
 
@@ -137,7 +139,13 @@ public class SongDetailsActivity extends AppCompatActivity
         try {
             JSONObject object = new JSONObject(JSONString);
             String songNameString = object.getString("songname");
-            songName.setText(songNameString);
+            songNameField.setText(songNameString);
+
+            String albumName = object.getString("Album_name");
+            albumNameField.setText(albumName);
+
+            String artistName = object.getString("Artist_name");
+            artistNameField.setText(artistName);
 
             upvoteButton.setVisibility(View.VISIBLE);
             downvoteButton.setVisibility(View.VISIBLE);
