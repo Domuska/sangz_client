@@ -12,8 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.gson.JsonArray;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -98,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements WebInterface.ICo
                         e.printStackTrace();
                         Snackbar snackbar = Snackbar.make(
                                 v,
-                                LoginActivity.this.getResources().getString(R.string.login_snackbar_text),
+                                LoginActivity.this.getResources().getString(R.string.login_snackbar_url_error_text),
                                 Snackbar.LENGTH_LONG);
                         snackbar.show();
                     }
@@ -139,11 +137,20 @@ public class LoginActivity extends AppCompatActivity implements WebInterface.ICo
                             getResources().getString(R.string.sharedPreferencesUserIDKey),
                             userID)
                             .apply();
+
+                    Intent intent = new Intent(LoginActivity.this, PlaylistActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Snackbar snackbar = Snackbar.make(
+                            findViewById(android.R.id.content),
+                            LoginActivity.this.getResources().getString(R.string.login_snackbar_name_error_text),
+                            Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
             }
 
-            Intent i = new Intent(LoginActivity.this, PlaylistActivity.class);
-            startActivity(i);
+
         }
         catch(JSONException e){
             e.printStackTrace();

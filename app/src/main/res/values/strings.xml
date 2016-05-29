@@ -47,6 +47,7 @@
     <string name="login_enter_name_hint">Enter User name</string>
     <string name="login_sign_in_button">Sign in</string>
     <string name="login_enter_ip">Enter IP &amp; Port for server or leave empty</string>
-    <string name="login_snackbar_text">URL was malformed, did you remember http:// and port?</string>
+    <string name="login_snackbar_url_error_text">URL was malformed, did you remember http:// and port?</string>
+    <string name="login_snackbar_name_error_text">This name was not found on server, try again</string>
 
 </resources>
