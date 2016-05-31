@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -74,16 +75,11 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
 
                 JSONObject aSong = items.getJSONObject(i);
                 String songHref = aSong.getString("href");
-//                String songVoteHref = aSong.getString("href_vote");
                 JSONArray linksArray = aSong.getJSONArray("links");
                 JSONObject songVoteHrefObject = linksArray.getJSONObject(0);
                 String songVoteHref = songVoteHrefObject.getString("href");
                 JSONArray songData = aSong.getJSONArray("data");
                 JSONObject songName = songData.getJSONObject(0);
-//                    String songNameString = songName.getString("value");
-
-                //                dataset.add(jsonObject.getString())
-//                dataset.add(songName.getString("value"));
 
                 songDataArrays.add(songData);
                 songURLs.add(songHref);
@@ -106,8 +102,8 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
         public TextView songName;
         public TextView voteCount;
         public TextView artistName;
-        public Button rowUpvoteButton;
-        public Button rowDownvoteButton;
+        public ImageButton rowUpvoteButton;
+        public ImageButton rowDownvoteButton;
         public IViewHolderClicks clickListener;
 
 
@@ -117,8 +113,8 @@ public class PlaylistRecyclerAdapter extends RecyclerView.Adapter<PlaylistRecycl
             songName = (TextView) rowView.findViewById(R.id.recycler_songName);
             voteCount = (TextView) rowView.findViewById(R.id.recycler_voteCount);
             artistName = (TextView) rowView.findViewById(R.id.recycler_artistName);
-            rowUpvoteButton = (Button) rowView.findViewById(R.id.recycler_upvotebutton);
-            rowDownvoteButton = (Button) rowView.findViewById(R.id.recycler_downvotebutton);
+            rowUpvoteButton = (ImageButton) rowView.findViewById(R.id.recycler_upvotebutton);
+            rowDownvoteButton = (ImageButton) rowView.findViewById(R.id.recycler_downvotebutton);
 
             rowDownvoteButton.setOnClickListener(this);
             rowUpvoteButton.setOnClickListener(this);

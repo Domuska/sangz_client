@@ -85,9 +85,7 @@ public class SongListActivity extends AppCompatActivity implements
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new SongListRecyclerAdapter(songsList));
-
-
+        recyclerView.setAdapter(new SongListRecyclerAdapter(songsList, this));
 
         sendGETSongsList();
 
@@ -136,7 +134,7 @@ public class SongListActivity extends AppCompatActivity implements
                 JSONObject oneSong = items.getJSONObject(i);
                 JSONArray data = oneSong.getJSONArray("data");
 
-                String songUrl = this.server_URL + oneSong.getString("href");
+                String songUrl = oneSong.getString("href");
                 Log.d(TAG, "url:" + songUrl);
                 String songName = "";
                 String artistName = "";
